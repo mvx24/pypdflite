@@ -394,7 +394,7 @@ class PDFHtml(object):
     def __init__(self, parent, session, htmltext, formats=None, context=None):
         self.document = parent
         self.session = session
-        self.htmltext = str(htmltext)
+        self.htmltext = htmltext
         self.context = {}
         if isinstance(context, dict):
             self.context = context

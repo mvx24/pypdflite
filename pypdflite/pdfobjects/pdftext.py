@@ -58,10 +58,10 @@ class PDFText(object):
             else:
                 # Escape and put in ()
                 text_string = self._text_to_string(self.text)
-                
+
                 if getattr(self, '_textMatrix', False):
                     self.text_position(self.cursor.x, self.cursor.y_prime)
-                
+
                 s = 'BT '
                 s += getattr(self, '_textMatrix', '%.2f %.2f Td ' % (self.cursor.x, self.cursor.y_prime))
                 s += ' %s Tj ' % text_string
@@ -153,6 +153,8 @@ class PDFText(object):
 
     def _text_to_string(self, txt):
         txt = self._escape(txt)
+        if type(txt) is unicode:
+            txt = codecs.BOM_UTF16_BE + txt.encode('utf-16be')
         txt = "(%s)" % txt
         return str(txt)
 
@@ -181,8 +183,8 @@ class PDFText(object):
         i, j, k, l, m, n = getattr(self, '_currentMatrix', (1., 0., 0., 1., 0., 0.))
         # i j 0    a b 0    i*a + j*c    i*b + j*d    i*0+j*0
         # k l 0 X  c d 0  = k*a + l*c    k*b + l*d    k*0+l*0
-        # m n 1    e f 1    m*a + n*c+e  m*b + n*d+f  
-        
+        # m n 1    e f 1    m*a + n*c+e  m*b + n*d+f
+
         a1, b1, c1, d1, e1, f1 = (i * a + j * c, i * b + j * d,
                                   k * a + l * c, k * b + l * d,
                                   m * a + n * c + e, m * b + n * d + f)

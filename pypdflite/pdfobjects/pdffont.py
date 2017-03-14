@@ -133,10 +133,11 @@ class PDFFont(object):
 
     def _string_width(self, s):
         """Get width of a string in the current font"""
-        s = str(s)
+        if not isinstance(s, (str, unicode)):
+            s = str(s)
         w = 0
         for i in s:
-            w += self.character_widths[i]
+            w += self.character_widths.get(i, self.character_widths['@'])
         return w * self.font_size / 1000.0
 
     def _output(self):
